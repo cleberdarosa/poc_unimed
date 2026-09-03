@@ -6,13 +6,9 @@ import '../services/familia_service.dart';
 
 class HomeProvider extends ChangeNotifier {
   final FamiliaService _service = FamiliaService();
-
   final SecureStorageService _storage = SecureStorageService();
-
   bool isLoading = false;
-
   Familia? titular;
-
   PlanoFamilia? planoAtivo;
 
   Future<void> loadHome() async {
