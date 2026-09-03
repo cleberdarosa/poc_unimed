@@ -4,7 +4,18 @@ import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/design_system.dart';
 
 class MiniCard extends StatelessWidget {
-  const MiniCard({super.key});
+  final String nome;
+  final String carteira;
+  final String produto;
+  final VoidCallback onVerCartao;
+
+  const MiniCard({
+    super.key,
+    required this.nome,
+    required this.carteira,
+    required this.produto,
+    required this.onVerCartao,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -15,30 +26,38 @@ class MiniCard extends StatelessWidget {
         color: AppTheme.primary,
         borderRadius: BorderRadius.circular(DS.radiusLg),
       ),
-      child: const Column(
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Unimax', style: TextStyle(color: Colors.white)),
+          Text(produto, style: const TextStyle(color: Colors.white)),
 
-          SizedBox(height: 16),
-
-          Text(
-            '0048 2228 4504 9921',
-            style: TextStyle(color: Colors.white, fontSize: 18),
-          ),
-
-          SizedBox(height: 8),
+          const SizedBox(height: DS.spaceMd),
 
           Text(
-            'Cleber Padilha',
-            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+            carteira,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
           ),
 
-          SizedBox(height: 16),
+          const SizedBox(height: DS.spaceSm),
+
+          Text(nome, style: const TextStyle(color: Colors.white)),
+
+          const SizedBox(height: DS.spaceLg),
 
           Align(
             alignment: Alignment.centerRight,
-            child: Text('Ver Cartão', style: TextStyle(color: Colors.white)),
+            child: TextButton.icon(
+              onPressed: onVerCartao,
+              icon: const Icon(Icons.badge_outlined, color: Colors.white),
+              label: const Text(
+                'Ver Cartão',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
           ),
         ],
       ),

@@ -1,32 +1,33 @@
 import 'package:flutter/material.dart';
 
 class HomeHeader extends StatelessWidget {
-  const HomeHeader({super.key});
+  final String nome;
+
+  const HomeHeader({super.key, required this.nome});
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
-        const Expanded(
+        Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Olá, Cleber',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                'Olá, $nome',
+                style: const TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-
-              Text('Alterar usuário'),
+              const Text('Alterar usuário'),
             ],
           ),
         ),
-
         IconButton(
           onPressed: () {},
           icon: const Icon(Icons.notifications_none),
         ),
-
-        IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
       ],
     );
   }

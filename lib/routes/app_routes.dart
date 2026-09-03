@@ -5,6 +5,8 @@ import '../features/cartao_virtual/cartao_virtual_page.dart';
 import '../features/home/home_page.dart';
 import '../features/splash/splash_page.dart';
 
+import '../models/familia.dart';
+
 class AppRoutes {
   AppRoutes._();
 
@@ -16,7 +18,11 @@ class AppRoutes {
       GoRoute(path: '/home', builder: (context, state) => const HomePage()),
       GoRoute(
         path: '/cartao',
-        builder: (context, state) => const CartaoVirtualPage(),
+        builder: (context, state) {
+          final plano = state.extra as PlanoFamilia;
+
+          return CartaoVirtualPage(plano: plano);
+        },
       ),
     ],
   );

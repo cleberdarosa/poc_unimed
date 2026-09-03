@@ -18,4 +18,16 @@ class SecureStorageService {
   Future<void> clear() async {
     await _storage.deleteAll();
   }
+
+  Future<String?> getRefreshToken() async {
+    return _storage.read(key: 'access_token');
+  }
+
+  Future<void> saveCpf(String cpf) async {
+    await _storage.write(key: 'cpf', value: cpf);
+  }
+
+  Future<String?> getCpf() async {
+    return _storage.read(key: 'cpf');
+  }
 }

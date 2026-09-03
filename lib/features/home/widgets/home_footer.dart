@@ -9,8 +9,10 @@ class HomeFooter extends StatelessWidget {
       currentIndex: 0,
       items: const [
         BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-
-        BottomNavigationBarItem(icon: Icon(Icons.badge), label: 'Cartão'),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.badge_outlined),
+          label: 'Cartão',
+        ),
       ],
     );
   }

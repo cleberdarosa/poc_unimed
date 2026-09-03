@@ -8,6 +8,9 @@ import '../../core/theme/design_system.dart';
 import '../../widgets/app_loading.dart';
 import '../../widgets/app_logo.dart';
 
+import '../../core/storage/secure_storage_service.dart';
+import '../../services/auth_service.dart';
+
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
 
@@ -23,14 +26,36 @@ class _SplashPageState extends State<SplashPage> {
   }
 
   Future<void> _initialize() async {
-    print('SPLASH CARREGADA');
+    try {
+      final storage = SecureStorageService();
 
-    //TODO: REMOVER ESS TIMER
-    await Future.delayed(const Duration(seconds: 3));
+      final refreshToken = await storage.getRefreshToken();
 
-    if (!mounted) return;
+      if (refreshToken == null || refreshToken.isEmpty) {
+        if (!mounted) return;
 
-    context.go('/login');
+        context.go('/login');
+        return;
+      }
+
+      final response = await AuthService().refreshToken(
+        refreshToken: refreshToken,
+      );
+
+      await storage.saveAccessToken(response['access_token']);
+
+      await storage.saveRefreshToken(response['refresh_token']);
+
+      if (!mounted) return;
+
+      context.go('/home');
+    } catch (_) {
+      await SecureStorageService().clear();
+
+      if (!mounted) return;
+
+      context.go('/login');
+    }
   }
 
   @override

@@ -55,6 +55,8 @@ class AuthProvider extends ChangeNotifier {
         await _storage.saveRefreshToken(refreshToken!);
       }
 
+      await _storage.saveCpf(cpf);
+
       isAuthenticated = true;
 
       notifyListeners();

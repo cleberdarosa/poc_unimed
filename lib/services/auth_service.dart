@@ -68,4 +68,20 @@ class AuthService {
       rethrow;
     }
   }
+
+  Future<Map<String, dynamic>> refreshToken({
+    required String refreshToken,
+  }) async {
+    final response = await _dio.post(
+      ApiConstants.accessToken,
+
+      options: Options(
+        headers: {'x-authorization': ApiConstants.xAuthorization},
+      ),
+
+      data: {'grant_type': 'refresh_token', 'refresh_token': refreshToken},
+    );
+
+    return Map<String, dynamic>.from(response.data);
+  }
 }
