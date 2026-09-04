@@ -1,15 +1,12 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../core/storage/secure_storage_service.dart';
 import '../../core/theme/app_theme.dart';
 import '../../core/theme/design_system.dart';
+import '../../services/auth_service.dart';
 import '../../widgets/app_loading.dart';
 import '../../widgets/app_logo.dart';
-
-import '../../core/storage/secure_storage_service.dart';
-import '../../services/auth_service.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
@@ -19,6 +16,8 @@ class SplashPage extends StatefulWidget {
 }
 
 class _SplashPageState extends State<SplashPage> {
+  static const Duration _minimumSplashDuration = Duration(seconds: 3);
+
   @override
   void initState() {
     super.initState();
@@ -26,15 +25,15 @@ class _SplashPageState extends State<SplashPage> {
   }
 
   Future<void> _initialize() async {
+    final stopwatch = Stopwatch()..start();
+
     try {
       final storage = SecureStorageService();
 
       final refreshToken = await storage.getRefreshToken();
 
       if (refreshToken == null || refreshToken.isEmpty) {
-        if (!mounted) return;
-
-        context.go('/login');
+        await _goToLoginAfterMinimumTime(stopwatch);
         return;
       }
 
@@ -46,16 +45,32 @@ class _SplashPageState extends State<SplashPage> {
 
       await storage.saveRefreshToken(response['refresh_token']);
 
-      if (!mounted) return;
+      if (!mounted) {
+        return;
+      }
 
       context.go('/home');
     } catch (_) {
       await SecureStorageService().clear();
 
-      if (!mounted) return;
-
-      context.go('/login');
+      await _goToLoginAfterMinimumTime(stopwatch);
+    } finally {
+      stopwatch.stop();
     }
+  }
+
+  Future<void> _goToLoginAfterMinimumTime(Stopwatch stopwatch) async {
+    final remainingTime = _minimumSplashDuration - stopwatch.elapsed;
+
+    if (remainingTime > Duration.zero) {
+      await Future<void>.delayed(remainingTime);
+    }
+
+    if (!mounted) {
+      return;
+    }
+
+    context.go('/login');
   }
 
   @override
@@ -67,10 +82,8 @@ class _SplashPageState extends State<SplashPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              AppLogo(width: 220),
-
+              AppLogo(width: DS.logoWidth),
               SizedBox(height: DS.spaceXXl),
-
               AppLoading(),
             ],
           ),

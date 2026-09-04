@@ -22,9 +22,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
 
-    Future.microtask(
-      () => context.read<HomeProvider>().loadHome(),
-    );
+    Future.microtask(() => context.read<HomeProvider>().loadHome());
   }
 
   @override
@@ -33,9 +31,7 @@ class _HomePageState extends State<HomePage> {
       builder: (context, provider, child) {
         if (provider.isLoading) {
           return const Scaffold(
-            body: Center(
-              child: CircularProgressIndicator(),
-            ),
+            body: Center(child: CircularProgressIndicator()),
           );
         }
 
@@ -44,18 +40,11 @@ class _HomePageState extends State<HomePage> {
 
         if (titular == null || planoAtivo == null) {
           return const Scaffold(
-            body: Center(
-              child: Text(
-                'Nenhum beneficiário encontrado',
-              ),
-            ),
+            body: Center(child: Text('Nenhum beneficiário encontrado')),
           );
         }
 
-        final primeiroNome = titular.nome
-            .trim()
-            .split(RegExp(r'\s+'))
-            .first;
+        final primeiroNome = titular.nome.trim().split(RegExp(r'\s+')).first;
 
         return Scaffold(
           backgroundColor: AppTheme.background,
@@ -103,21 +92,14 @@ class _HomePageState extends State<HomePage> {
       ),
       child: Column(
         children: [
-          HomeHeader(
-            nome: primeiroNome,
-          ),
-          const SizedBox(
-            height: DS.spaceLg,
-          ),
+          HomeHeader(nome: primeiroNome),
+          const SizedBox(height: DS.spaceLg),
           MiniCard(
             nome: nomeCompleto,
             carteira: carteira,
             produto: produto,
             onVerCartao: () {
-              context.go(
-                '/cartao',
-                extra: planoAtivo,
-              );
+              context.go('/cartao', extra: planoAtivo);
             },
           ),
         ],
@@ -127,45 +109,22 @@ class _HomePageState extends State<HomePage> {
 
   Widget _buildHomeContent() {
     return Padding(
-      padding: const EdgeInsets.all(
-        DS.spaceLg,
-      ),
+      padding: const EdgeInsets.all(DS.spaceLg),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'O que você precisa?',
-            style: AppTheme.titleLarge,
-          ),
-          const SizedBox(
-            height: DS.spaceLg,
-          ),
+          const Text('O que você precisa?', style: AppTheme.titleLarge),
+          const SizedBox(height: DS.spaceLg),
           _buildQuickActions(),
-          const SizedBox(
-            height: DS.spaceXl,
-          ),
-          const Text(
-            'Pensado para você!',
-            style: AppTheme.titleLarge,
-          ),
-          const SizedBox(
-            height: DS.spaceLg,
-          ),
+          const SizedBox(height: DS.spaceXl),
+          const Text('Pensado para você!', style: AppTheme.titleLarge),
+          const SizedBox(height: DS.spaceLg),
           _buildPromotionalBanner(),
-          const SizedBox(
-            height: DS.spaceXl,
-          ),
-          const Text(
-            'Serviços Próprios',
-            style: AppTheme.titleLarge,
-          ),
-          const SizedBox(
-            height: DS.spaceLg,
-          ),
+          const SizedBox(height: DS.spaceXl),
+          const Text('Serviços Próprios', style: AppTheme.titleLarge),
+          const SizedBox(height: DS.spaceLg),
           _buildServices(),
-          const SizedBox(
-            height: DS.spaceXl,
-          ),
+          const SizedBox(height: DS.spaceXl),
         ],
       ),
     );
@@ -188,22 +147,10 @@ class _HomePageState extends State<HomePage> {
           icon: Icons.calendar_month_outlined,
           title: 'Agendamentos',
         ),
-        QuickActionCard(
-          icon: Icons.attach_money,
-          title: 'Financeiro',
-        ),
-        QuickActionCard(
-          icon: Icons.science_outlined,
-          title: 'Exames',
-        ),
-        QuickActionCard(
-          icon: Icons.badge_outlined,
-          title: 'Meu Plano',
-        ),
-        QuickActionCard(
-          icon: Icons.more_horiz,
-          title: 'Outros',
-        ),
+        QuickActionCard(icon: Icons.attach_money, title: 'Financeiro'),
+        QuickActionCard(icon: Icons.science_outlined, title: 'Exames'),
+        QuickActionCard(icon: Icons.badge_outlined, title: 'Meu Plano'),
+        QuickActionCard(icon: Icons.more_horiz, title: 'Outros'),
       ],
     );
   }
@@ -214,18 +161,11 @@ class _HomePageState extends State<HomePage> {
       height: DS.homeBannerHeight,
       decoration: BoxDecoration(
         color: AppTheme.white,
-        border: Border.all(
-          color: AppTheme.border,
-        ),
-        borderRadius: BorderRadius.circular(
-          DS.radiusLg,
-        ),
+        border: Border.all(color: AppTheme.border),
+        borderRadius: BorderRadius.circular(DS.radiusLg),
       ),
       child: const Center(
-        child: Text(
-          'Banner Promocional',
-          style: AppTheme.actionTitle,
-        ),
+        child: Text('Banner Promocional', style: AppTheme.actionTitle),
       ),
     );
   }
@@ -243,9 +183,7 @@ class _HomePageState extends State<HomePage> {
               title: 'Vacinas',
             ),
           ),
-          SizedBox(
-            width: DS.spaceMd,
-          ),
+          SizedBox(width: DS.spaceMd),
           SizedBox(
             width: DS.homeServiceCardWidth,
             child: QuickActionCard(
@@ -253,9 +191,7 @@ class _HomePageState extends State<HomePage> {
               title: 'Laboratório',
             ),
           ),
-          SizedBox(
-            width: DS.spaceMd,
-          ),
+          SizedBox(width: DS.spaceMd),
           SizedBox(
             width: DS.homeServiceCardWidth,
             child: QuickActionCard(

@@ -21,92 +21,59 @@ class MiniCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(
-        DS.spaceLg,
-      ),
+      padding: const EdgeInsets.all(DS.spaceLg),
       decoration: BoxDecoration(
         color: AppTheme.cardBackground,
-        borderRadius: BorderRadius.circular(
-          DS.radiusLg,
-        ),
+        borderRadius: BorderRadius.circular(DS.radiusLg),
       ),
       child: Column(
-        crossAxisAlignment:
-            CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              const Icon(
-                Icons.favorite,
-                color: AppTheme.white,
-              ),
+              const Icon(Icons.favorite, color: AppTheme.white),
 
               const Spacer(),
 
               Container(
-                padding:
-                    const EdgeInsets.symmetric(
+                padding: const EdgeInsets.symmetric(
                   horizontal: 12,
                   vertical: 8,
                 ),
                 decoration: BoxDecoration(
                   color: AppTheme.cardBadge,
-                  borderRadius:
-                      BorderRadius.circular(
-                    DS.radiusLg,
-                  ),
+                  borderRadius: BorderRadius.circular(DS.radiusLg),
                 ),
-                child: Text(
-                  produto,
-                  style: AppTheme.cardTag,
-                ),
+                child: Text(produto, style: AppTheme.cardTag),
               ),
             ],
           ),
 
-          const SizedBox(
-            height: DS.spaceLg,
-          ),
+          const SizedBox(height: DS.spaceLg),
 
-          Text(
-            carteira,
-            style: AppTheme.cardNumber,
-          ),
+          Text(carteira, style: AppTheme.cardNumber),
 
-          const SizedBox(
-            height: DS.spaceSm,
-          ),
+          const SizedBox(height: DS.spaceSm),
 
-          Text(
-            nome,
-            style: AppTheme.cardName,
-          ),
+          Text(nome, style: AppTheme.cardName),
 
-          const SizedBox(
-            height: DS.spaceLg,
-          ),
+          const SizedBox(height: DS.spaceLg),
 
           Row(
             children: [
               Expanded(
                 child: ElevatedButton(
                   onPressed: onVerCartao,
-                  child: const Text(
-                    'Ver Cartão',
-                  ),
+                  child: const Text('Ver Cartão'),
                 ),
               ),
 
-              const SizedBox(
-                width: DS.spaceMd,
-              ),
+              const SizedBox(width: DS.spaceMd),
 
               Expanded(
                 child: ElevatedButton(
                   onPressed: () {},
-                  child: const Text(
-                    'Gerar Token',
-                  ),
+                  child: const Text('Gerar Token'),
                 ),
               ),
             ],

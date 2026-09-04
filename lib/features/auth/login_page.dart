@@ -26,7 +26,6 @@ class _LoginPageState extends State<LoginPage> {
     senhaController.text = 'H3itor@2026';
   }
 
-
   @override
   void dispose() {
     cpfController.dispose();
@@ -34,7 +33,6 @@ class _LoginPageState extends State<LoginPage> {
     super.dispose();
   }
 
-  
   Future<void> _login() async {
     final authProvider = context.read<AuthProvider>();
 
@@ -81,7 +79,7 @@ class _LoginPageState extends State<LoginPage> {
 
                   Text(
                     'Acesse sua conta Unimed Porto Alegre',
-                    style: TextStyle(color: AppTheme.textSecondary),
+                    style: TextStyle(color: AppTheme.secondary),
                   ),
 
                   const SizedBox(height: 40),

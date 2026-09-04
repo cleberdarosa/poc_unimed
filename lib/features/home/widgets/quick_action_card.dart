@@ -7,46 +7,25 @@ class QuickActionCard extends StatelessWidget {
   final IconData icon;
   final String title;
 
-  const QuickActionCard({
-    super.key,
-    required this.icon,
-    required this.title,
-  });
+  const QuickActionCard({super.key, required this.icon, required this.title});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      constraints: const BoxConstraints(
-        minHeight: DS.quickActionHeight,
-      ),
+      constraints: const BoxConstraints(minHeight: DS.quickActionHeight),
       decoration: BoxDecoration(
         color: AppTheme.white,
-        border: Border.all(
-          color: AppTheme.border,
-        ),
-        borderRadius: BorderRadius.circular(
-          DS.radiusLg,
-        ),
+        border: Border.all(color: AppTheme.border),
+        borderRadius: BorderRadius.circular(DS.radiusLg),
       ),
       child: Column(
-        mainAxisAlignment:
-            MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
-            icon,
-            size: DS.actionIconSize,
-            color: AppTheme.primary,
-          ),
+          Icon(icon, size: DS.actionIconSize, color: AppTheme.primary),
 
-          const SizedBox(
-            height: DS.spaceSm,
-          ),
+          const SizedBox(height: DS.spaceSm),
 
-          Text(
-            title,
-            textAlign: TextAlign.center,
-            style: AppTheme.actionTitle,
-          ),
+          Text(title, textAlign: TextAlign.center, style: AppTheme.actionTitle),
         ],
       ),
     );
