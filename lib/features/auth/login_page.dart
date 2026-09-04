@@ -22,10 +22,10 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
-
     cpfController.text = '00824521056';
     senhaController.text = 'H3itor@2026';
   }
+
 
   @override
   void dispose() {
@@ -34,6 +34,7 @@ class _LoginPageState extends State<LoginPage> {
     super.dispose();
   }
 
+  
   Future<void> _login() async {
     final authProvider = context.read<AuthProvider>();
 

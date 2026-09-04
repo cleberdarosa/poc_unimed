@@ -21,43 +21,95 @@ class MiniCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(DS.spaceLg),
+      padding: const EdgeInsets.all(
+        DS.spaceLg,
+      ),
       decoration: BoxDecoration(
-        color: AppTheme.primary,
-        borderRadius: BorderRadius.circular(DS.radiusLg),
+        color: AppTheme.cardBackground,
+        borderRadius: BorderRadius.circular(
+          DS.radiusLg,
+        ),
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment:
+            CrossAxisAlignment.start,
         children: [
-          Text(produto, style: const TextStyle(color: Colors.white)),
+          Row(
+            children: [
+              const Icon(
+                Icons.favorite,
+                color: AppTheme.white,
+              ),
 
-          const SizedBox(height: DS.spaceMd),
+              const Spacer(),
+
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 8,
+                ),
+                decoration: BoxDecoration(
+                  color: AppTheme.cardBadge,
+                  borderRadius:
+                      BorderRadius.circular(
+                    DS.radiusLg,
+                  ),
+                ),
+                child: Text(
+                  produto,
+                  style: AppTheme.cardTag,
+                ),
+              ),
+            ],
+          ),
+
+          const SizedBox(
+            height: DS.spaceLg,
+          ),
 
           Text(
             carteira,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
+            style: AppTheme.cardNumber,
           ),
 
-          const SizedBox(height: DS.spaceSm),
+          const SizedBox(
+            height: DS.spaceSm,
+          ),
 
-          Text(nome, style: const TextStyle(color: Colors.white)),
+          Text(
+            nome,
+            style: AppTheme.cardName,
+          ),
 
-          const SizedBox(height: DS.spaceLg),
+          const SizedBox(
+            height: DS.spaceLg,
+          ),
 
-          Align(
-            alignment: Alignment.centerRight,
-            child: TextButton.icon(
-              onPressed: onVerCartao,
-              icon: const Icon(Icons.badge_outlined, color: Colors.white),
-              label: const Text(
-                'Ver Cartão',
-                style: TextStyle(color: Colors.white),
+          Row(
+            children: [
+              Expanded(
+                child: ElevatedButton(
+                  onPressed: onVerCartao,
+                  child: const Text(
+                    'Ver Cartão',
+                  ),
+                ),
               ),
-            ),
+
+              const SizedBox(
+                width: DS.spaceMd,
+              ),
+
+              Expanded(
+                child: ElevatedButton(
+                  onPressed: () {},
+                  child: const Text(
+                    'Gerar Token',
+                  ),
+                ),
+              ),
+            ],
           ),
         ],
       ),

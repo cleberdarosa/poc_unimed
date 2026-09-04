@@ -7,16 +7,13 @@ class SecureStorageService {
     await _storage.write(key: 'access_token', value: token);
   }
 
-  Future<void> saveRefreshToken(String token) async {
-    await _storage.write(key: 'refresh_token', value: token);
-  }
-
   Future<String?> getAccessToken() async {
     return _storage.read(key: 'access_token');
   }
 
-  Future<void> clear() async {
-    await _storage.deleteAll();
+
+  Future<void> saveRefreshToken(String token) async {
+    await _storage.write(key: 'refresh_token', value: token);
   }
 
   Future<String?> getRefreshToken() async {
@@ -30,4 +27,10 @@ class SecureStorageService {
   Future<String?> getCpf() async {
     return _storage.read(key: 'cpf');
   }
+
+    Future<void> clear() async {
+    await _storage.deleteAll();
+  }
+
+
 }
