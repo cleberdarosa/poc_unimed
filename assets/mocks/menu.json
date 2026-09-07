@@ -1,0 +1,126 @@
+{
+  "version": 1,
+  "items": [
+    
+    {
+  "id": "device-resources",
+  "title": "Recursos do Dispositivo",
+  "icon": "settings",
+  "color": "menuGreen",
+  "children": [
+    {
+      "id": "device-camera",
+      "title": "Câmera",
+      "route": "/device/camera"
+    },
+    {
+      "id": "device-gallery",
+      "title": "Galeria",
+      "route": "/device/gallery"
+    },
+    {
+      "id": "device-files",
+      "title": "Arquivos",
+      "route": "/device/files"
+    },
+    {
+      "id": "device-location",
+      "title": "Localização",
+      "route": "/device/location"
+    }
+  ]
+}
+    ,{
+      "id": "medical-network",
+      "title": "Encontre um Médico e Rede Credenciada",
+      "icon": "menu_book",
+      "color": "menuGreen",
+      "route": "/home",
+      "children": []
+    },
+    {
+      "id": "medical-appointments",
+      "title": "Consultas Médicas",
+      "icon": "medical_services",
+      "color": "menuLime",
+      "children": [
+        {
+          "id": "schedule-consultation",
+          "title": "Agendar consulta",
+          "children": [
+            {
+              "id": "in-person-consultation",
+              "title": "Consulta presencial",
+              "route": "/home"
+            },
+            {
+              "id": "telemedicine",
+              "title": "Telemedicina",
+              "route": "/home"
+            },
+            {
+              "id": "digital-emergency",
+              "title": "Pronto atendimento digital",
+              "route": "/home"
+            }
+          ]
+        },
+        {
+          "id": "next-consultations",
+          "title": "Próximas consultas",
+          "children": [
+            {
+              "id": "confirmed-consultations",
+              "title": "Consultas confirmadas",
+              "route": "/home"
+            },
+            {
+              "id": "pending-consultations",
+              "title": "Consultas pendentes",
+              "route": "/home"
+            }
+          ]
+        },
+        {
+          "id": "consultation-history",
+          "title": "Histórico de consultas",
+          "route": "/home"
+        }
+      ]
+    },
+    {
+      "id": "schedules",
+      "title": "Agendamentos",
+      "icon": "calendar_month",
+      "color": "menuTerracotta",
+      "children": [
+        {
+          "id": "new-schedule",
+          "title": "Novo agendamento",
+          "children": [
+            {
+              "id": "schedule-exam",
+              "title": "Agendar exame",
+              "route": "/home"
+            },
+            {
+              "id": "schedule-procedure",
+              "title": "Agendar procedimento",
+              "route": "/home"
+            }
+          ]
+        },
+        {
+          "id": "upcoming-schedules",
+          "title": "Próximos agendamentos",
+          "route": "/home"
+        },
+        {
+          "id": "schedule-history",
+          "title": "Histórico",
+          "route": "/home"
+        }
+      ]
+    }
+  ]
+}

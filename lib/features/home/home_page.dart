@@ -22,7 +22,13 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
 
-    Future.microtask(() => context.read<HomeProvider>().loadHome());
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) {
+        return;
+      }
+
+      context.read<HomeProvider>().loadHome();
+    });
   }
 
   @override
@@ -48,10 +54,7 @@ class _HomePageState extends State<HomePage> {
 
         return Scaffold(
           backgroundColor: AppTheme.background,
-          bottomNavigationBar: AppBottomNav(
-            currentIndex: 0,
-            onTap: _handleBottomNavigation,
-          ),
+          bottomNavigationBar: const AppBottomNav(currentItemId: 'home'),
           body: SafeArea(
             bottom: false,
             child: SingleChildScrollView(
@@ -202,24 +205,5 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
     );
-  }
-
-  void _handleBottomNavigation(int index) {
-    switch (index) {
-      case 0:
-        return;
-      case 1:
-        // TODO: navegar para Exames.
-        return;
-      case 2:
-        // TODO: navegar para Guia Médico.
-        return;
-      case 3:
-        // TODO: navegar para Perfil.
-        return;
-      case 4:
-        // TODO: abrir Menu.
-        return;
-    }
   }
 }

@@ -27,10 +27,7 @@ class _CartaoVirtualPageState extends State<CartaoVirtualPage> {
       child: Scaffold(
         backgroundColor: AppTheme.white,
         appBar: _buildAppBar(context),
-        bottomNavigationBar: AppBottomNav(
-          currentIndex: 0,
-          onTap: (index) => _handleBottomNavigation(context, index),
-        ),
+        bottomNavigationBar: const AppBottomNav(currentItemId: 'home'),
         body: SafeArea(
           top: false,
           bottom: false,
@@ -476,22 +473,6 @@ class _CartaoVirtualPageState extends State<CartaoVirtualPage> {
     }
 
     context.go('/');
-  }
-
-  void _handleBottomNavigation(BuildContext context, int index) {
-    switch (index) {
-      case 0:
-        context.go('/home');
-        return;
-      case 1:
-        return;
-      case 2:
-        return;
-      case 3:
-        return;
-      case 4:
-        return;
-    }
   }
 
   static const List<String> _mockCoverages = [

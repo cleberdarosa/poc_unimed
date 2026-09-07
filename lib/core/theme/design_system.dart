@@ -62,4 +62,9 @@ class DS {
   static const double menuFocusedBorderWidth = 2;
   static const double menuArrowTurns = 0.5;
   static const Duration menuAnimationDuration = Duration(milliseconds: 220);
+
+  // Bottom Navigation
+  static const double bottomNavHeight = 80;
+  static const double bottomNavLoadingSize = 22;
+  static const double bottomNavLoadingStrokeWidth = 2;
 }

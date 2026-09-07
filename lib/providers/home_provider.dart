@@ -1,45 +1,118 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 
-import '../core/storage/secure_storage_service.dart';
+import '../core/utils/app_logger.dart';
 import '../models/familia.dart';
 import '../services/familia_service.dart';
 
 class HomeProvider extends ChangeNotifier {
-  final FamiliaService _service = FamiliaService();
-  final SecureStorageService _storage = SecureStorageService();
+  final FamiliaService _service;
+
+  HomeProvider({FamiliaService? service})
+    : _service = service ?? FamiliaService();
+
   bool isLoading = false;
+  bool sessionExpired = false;
+  String? errorMessage;
   Familia? titular;
   PlanoFamilia? planoAtivo;
 
+  bool get hasData => titular != null && planoAtivo != null;
+
   Future<void> loadHome() async {
-    try {
-      isLoading = true;
-      notifyListeners();
-
-      final token = await _storage.getAccessToken();
-
-      if (token == null) {
-        return;
-      }
-
-      final cpf = await _storage.getCpf();
-
-      if (cpf == null) {
-        return;
-      }
-
-      final response = await _service.getFamilia(cpf: cpf, token: token);
-
-      final familia = (response['items'] as List);
-
-      titular = Familia.fromJson(familia.first);
-
-      planoAtivo = titular!.planos.firstWhere(
-        (p) => p.statusCarteira == 'ativo',
+    if (isLoading) {
+      AppLogger.home(
+        'Carregamento ignorado porque já existe uma operação em andamento.',
       );
-    } finally {
-      isLoading = false;
-      notifyListeners();
+      return;
     }
+
+    AppLogger.home('Iniciando carregamento da Home.');
+
+    _setLoading(true);
+    errorMessage = null;
+    sessionExpired = false;
+
+    try {
+      final response = await _service.getFamilia();
+      final rawItems = response['items'];
+
+      if (rawItems is! List || rawItems.isEmpty) {
+        throw const FamiliaServiceException(
+          'Nenhum beneficiário foi encontrado.',
+        );
+      }
+
+      AppLogger.home('Beneficiários recebidos: ${rawItems.length}.');
+
+      final firstItem = rawItems.first;
+
+      if (firstItem is! Map<String, dynamic>) {
+        throw const FamiliaServiceException(
+          'Os dados do beneficiário estão em formato inválido.',
+        );
+      }
+
+      final loadedTitular = Familia.fromJson(firstItem);
+
+      AppLogger.home(
+        'Beneficiário convertido. '
+        'Planos encontrados: ${loadedTitular.planos.length}.',
+      );
+
+      final activePlans = loadedTitular.planos.where(
+        (plan) => plan.statusCarteira.toLowerCase() == 'ativo',
+      );
+
+      if (activePlans.isEmpty) {
+        throw const FamiliaServiceException(
+          'Nenhum plano ativo foi encontrado.',
+        );
+      }
+
+      titular = loadedTitular;
+      planoAtivo = activePlans.first;
+
+      AppLogger.home('Home carregada. Plano ativo encontrado.');
+    } on SessionExpiredException catch (error) {
+      AppLogger.home('Sessão expirada durante o carregamento.');
+      sessionExpired = true;
+      titular = null;
+      planoAtivo = null;
+      errorMessage = error.message;
+    } on FamiliaServiceException catch (error) {
+      AppLogger.home('Falha conhecida: ${error.message}');
+      titular = null;
+      planoAtivo = null;
+      errorMessage = error.message;
+    } catch (error, stackTrace) {
+      AppLogger.error(
+        'HOME',
+        'Erro inesperado ao carregar a Home.',
+        error: error,
+        stackTrace: stackTrace,
+      );
+      titular = null;
+      planoAtivo = null;
+      errorMessage = 'Não foi possível carregar os dados da Home.';
+    } finally {
+      _setLoading(false);
+      AppLogger.home('Carregamento da Home finalizado.');
+    }
+  }
+
+  Future<void> retry() => loadHome();
+
+  void clear() {
+    AppLogger.home('Limpando dados mantidos pelo HomeProvider.');
+    titular = null;
+    planoAtivo = null;
+    errorMessage = null;
+    sessionExpired = false;
+    notifyListeners();
+  }
+
+  void _setLoading(bool value) {
+    isLoading = value;
+    notifyListeners();
   }
 }

@@ -7,6 +7,11 @@ import '../features/menu/menu_page.dart';
 import '../features/splash/splash_page.dart';
 import '../models/familia.dart';
 
+import '../features/device_permissions/camera_permission_page.dart';
+import '../features/device_permissions/files_permission_page.dart';
+import '../features/device_permissions/gallery_permission_page.dart';
+import '../features/device_permissions/location_permission_page.dart';
+
 class AppRoutes {
   AppRoutes._();
 
@@ -23,6 +28,24 @@ class AppRoutes {
           final plano = state.extra as PlanoFamilia;
           return CartaoVirtualPage(plano: plano);
         },
+      ),
+
+      //DEVICE INFORMATIONS
+      GoRoute(
+        path: '/device/camera',
+        builder: (context, state) => const CameraPermissionPage(),
+      ),
+      GoRoute(
+        path: '/device/gallery',
+        builder: (context, state) => const GalleryPermissionPage(),
+      ),
+      GoRoute(
+        path: '/device/files',
+        builder: (context, state) => const FilesPermissionPage(),
+      ),
+      GoRoute(
+        path: '/device/location',
+        builder: (context, state) => const LocationPermissionPage(),
       ),
     ],
   );

@@ -1,12 +1,20 @@
 plugins {
     id("com.android.application")
-    // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
+
+    // O Flutter Gradle Plugin deve ser aplicado
+    // depois do Android Gradle Plugin.
     id("dev.flutter.flutter-gradle-plugin")
 }
 
 android {
     namespace = "com.example.poc_unimed"
-    compileSdk = flutter.compileSdkVersion
+
+    /*
+     * Mantido em 36 para compatibilidade com a versão atual
+     * do Android Gradle Plugin utilizada pelo projeto.
+     */
+    compileSdk = 36
+
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
@@ -15,24 +23,36 @@ android {
     }
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
+        /*
+         * Identificador provisório da POC.
+         * Antes da publicação, substituir por um identificador definitivo,
+         * por exemplo: br.com.unimedpoa.poc
+         */
         applicationId = "com.example.poc_unimed"
-        // You can update the following values to match your application needs.
-        // For more information, see: https://flutter.dev/to/review-gradle-config.
-        minSdk = flutter.minSdkVersion
-        targetSdk = flutter.targetSdkVersion
-        // Uses the version code from pubspec.yaml. When using split APKs, 1000 * ABI_VERSION
-        // is added automatically by Flutter. (https://developer.android.com/studio/build/configure-apk-splits#configure-APK-versions)
-        // You can force using the value of versionCode by specifying the `-P force-version-code-ignoring-abi=true`
-        // flag during build.
+
+        /*
+         * Android 7.0 ou superior.
+         * Essa configuração oferece compatibilidade adequada
+         * com os plugins utilizados pela POC.
+         */
+        minSdk = 24
+
+        /*
+         * Mantido em 36 para não habilitar antecipadamente
+         * alterações comportamentais do Android API 37.
+         */
+        targetSdk = 36
+
         versionCode = flutter.versionCode
         versionName = flutter.versionName
     }
 
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
+            /*
+             * Configuração provisória para a POC.
+             * Antes da publicação, criar uma chave própria de assinatura.
+             */
             signingConfig = signingConfigs.getByName("debug")
         }
     }
@@ -40,7 +60,8 @@ android {
 
 kotlin {
     compilerOptions {
-        jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17
+        jvmTarget =
+            org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17
     }
 }
 

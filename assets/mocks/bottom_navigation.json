@@ -1,0 +1,50 @@
+{
+  "version": 1,
+  "items": [
+    {
+      "id": "home",
+      "label": "Início 2",
+      "icon": "home_outlined",
+      "activeIcon": "home",
+      "route": "/home",
+      "enabled": true,
+      "order": 1
+    },
+    {
+      "id": "exams",
+      "label": "Exames",
+      "icon": "science_outlined",
+      "activeIcon": "science",
+      "route": "/home",
+      "enabled": true,
+      "order": 2
+    },
+    {
+      "id": "medical-guide",
+      "label": "Guia Médico",
+      "icon": "menu_book_outlined",
+      "activeIcon": "menu_book",
+      "route": "/home",
+      "enabled": true,
+      "order": 3
+    },
+    {
+      "id": "profile",
+      "label": "Perfil",
+      "icon": "person_outline",
+      "activeIcon": "person",
+      "route": "/home",
+      "enabled": true,
+      "order": 4
+    },
+    {
+      "id": "menu",
+      "label": "Menu",
+      "icon": "menu",
+      "activeIcon": "menu",
+      "route": "/menu",
+      "enabled": true,
+      "order": 5
+    }
+  ]
+}

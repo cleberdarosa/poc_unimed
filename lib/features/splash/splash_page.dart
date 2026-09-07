@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../core/storage/secure_storage_service.dart';
 import '../../core/theme/app_theme.dart';
 import '../../core/theme/design_system.dart';
-import '../../services/auth_service.dart';
+import '../../core/utils/app_logger.dart';
+import '../../models/auth_response.dart';
+import '../../repositories/auth_repository.dart';
 import '../../widgets/app_loading.dart';
 import '../../widgets/app_logo.dart';
 
@@ -16,7 +17,9 @@ class SplashPage extends StatefulWidget {
 }
 
 class _SplashPageState extends State<SplashPage> {
-  static const Duration _minimumSplashDuration = Duration(seconds: 3);
+  static const Duration _minimumSplashDuration = Duration(seconds: 5);
+
+  final AuthRepository _authRepository = AuthRepository();
 
   @override
   void initState() {
@@ -25,52 +28,47 @@ class _SplashPageState extends State<SplashPage> {
   }
 
   Future<void> _initialize() async {
-    final stopwatch = Stopwatch()..start();
+    AppLogger.splash(
+      'Splash iniciada. Tempo mínimo: '
+      '${_minimumSplashDuration.inSeconds} segundos.',
+    );
+
+    final minimumTime = Future<void>.delayed(_minimumSplashDuration);
+
+    SessionRestoreResult result;
 
     try {
-      final storage = SecureStorageService();
-
-      final refreshToken = await storage.getRefreshToken();
-
-      if (refreshToken == null || refreshToken.isEmpty) {
-        await _goToLoginAfterMinimumTime(stopwatch);
-        return;
-      }
-
-      final response = await AuthService().refreshToken(
-        refreshToken: refreshToken,
+      AppLogger.splash('Solicitando restauração da sessão.');
+      result = await _authRepository.restoreSession();
+      AppLogger.splash('Restauração concluída: $result.');
+    } catch (error, stackTrace) {
+      AppLogger.error(
+        'SPLASH',
+        'Erro não tratado durante a restauração.',
+        error: error,
+        stackTrace: stackTrace,
       );
-
-      await storage.saveAccessToken(response['access_token']);
-
-      await storage.saveRefreshToken(response['refresh_token']);
-
-      if (!mounted) {
-        return;
-      }
-
-      context.go('/home');
-    } catch (_) {
-      await SecureStorageService().clear();
-
-      await _goToLoginAfterMinimumTime(stopwatch);
-    } finally {
-      stopwatch.stop();
+      await _authRepository.logout();
+      result = SessionRestoreResult.unauthenticated;
     }
-  }
 
-  Future<void> _goToLoginAfterMinimumTime(Stopwatch stopwatch) async {
-    final remainingTime = _minimumSplashDuration - stopwatch.elapsed;
-
-    if (remainingTime > Duration.zero) {
-      await Future<void>.delayed(remainingTime);
-    }
+    AppLogger.splash('Aguardando o tempo mínimo da Splash.');
+    await minimumTime;
 
     if (!mounted) {
+      AppLogger.splash('Splash não está mais montada. Navegação cancelada.');
       return;
     }
 
-    context.go('/login');
+    switch (result) {
+      case SessionRestoreResult.authenticated:
+        AppLogger.splash('Sessão autenticada. Navegando para Home.');
+        context.go('/home');
+
+      case SessionRestoreResult.unauthenticated:
+        AppLogger.splash('Sessão não autenticada. Navegando para Login.');
+        context.go('/login');
+    }
   }
 
   @override
