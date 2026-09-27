@@ -1,92 +1,80 @@
 import 'package:flutter/foundation.dart';
 
-import '../core/storage/secure_storage_service.dart';
-import '../services/auth_service.dart';
+import '../models/auth_response.dart';
+import '../repositories/auth_repository.dart';
 
 class AuthProvider extends ChangeNotifier {
-  final AuthService _authService = AuthService();
+  final AuthRepository _repository;
 
-  final SecureStorageService _storage = SecureStorageService();
+  AuthProvider({AuthRepository? repository})
+    : _repository = repository ?? AuthRepository();
 
   bool isAuthenticated = false;
-
   bool isLoading = false;
+  String? errorMessage;
+  AuthSession? session;
 
-  String? accessToken;
-
-  String? refreshToken;
+  String? get accessToken => session?.accessToken;
+  String? get refreshToken => session?.refreshToken;
+  String? get cpf => session?.cpf;
 
   Future<bool> login({required String cpf, required String senha}) async {
+    if (isLoading) return false;
+
+    _setLoading(true);
+    errorMessage = null;
+
     try {
-      isLoading = true;
-      notifyListeners();
-
-      // API 1 - Authorization
-      final authorizationResponse = await _authService.authorization(
-        cpf: cpf,
-        senha: senha,
-      );
-
-      final code = authorizationResponse['code'];
-
-      final authorizationToken = authorizationResponse['access_token'];
-
-      if (code == null || authorizationToken == null) {
-        return false;
-      }
-
-      // API 2 - Access Token
-      final tokenResponse = await _authService.accessToken(
-        code: code,
-        authorizationToken: authorizationToken,
-      );
-
-      accessToken = tokenResponse['access_token'];
-
-      refreshToken = tokenResponse['refresh_token'];
-
-      if (accessToken == null) {
-        return false;
-      }
-
-      await _storage.saveAccessToken(accessToken!);
-
-      if (refreshToken != null) {
-        await _storage.saveRefreshToken(refreshToken!);
-      }
-
-      await _storage.saveCpf(cpf);
-
+      session = await _repository.login(cpf: cpf, senha: senha);
       isAuthenticated = true;
-
-      notifyListeners();
-
       return true;
-    } catch (e) {
-      debugPrint('Erro ao realizar login: $e');
-
+    } catch (error) {
+      debugPrint('Erro ao realizar login: $error');
+      session = null;
+      isAuthenticated = false;
+      errorMessage = 'Não foi possível realizar o login.';
       return false;
     } finally {
-      isLoading = false;
-      notifyListeners();
+      _setLoading(false);
     }
   }
 
   Future<void> checkLogin() async {
-    final token = await _storage.getAccessToken();
+    _setLoading(true);
 
-    isAuthenticated = token != null && token.isNotEmpty;
+    try {
+      final result = await _repository.restoreSession();
+      session = _repository.currentSession;
+      isAuthenticated = result == SessionRestoreResult.authenticated;
+    } finally {
+      _setLoading(false);
+    }
+  }
 
+  Future<bool> refreshSession() async {
+    final refreshedSession = await _repository.refreshSession(session: session);
+
+    session = refreshedSession;
+    isAuthenticated = refreshedSession != null;
     notifyListeners();
+    return isAuthenticated;
   }
 
   Future<void> logout() async {
-    await _storage.clear();
-
+    await _repository.logout();
+    session = null;
     isAuthenticated = false;
-    accessToken = null;
-    refreshToken = null;
+    errorMessage = null;
+    notifyListeners();
+  }
 
+  void clearError() {
+    errorMessage = null;
+    notifyListeners();
+  }
+
+  void _setLoading(bool value) {
+    isLoading = value;
     notifyListeners();
   }
 }

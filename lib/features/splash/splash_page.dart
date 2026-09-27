@@ -1,15 +1,13 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../core/theme/app_theme.dart';
 import '../../core/theme/design_system.dart';
+import '../../core/utils/app_logger.dart';
+import '../../models/auth_response.dart';
+import '../../repositories/auth_repository.dart';
 import '../../widgets/app_loading.dart';
 import '../../widgets/app_logo.dart';
-
-import '../../core/storage/secure_storage_service.dart';
-import '../../services/auth_service.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
@@ -19,6 +17,10 @@ class SplashPage extends StatefulWidget {
 }
 
 class _SplashPageState extends State<SplashPage> {
+  static const Duration _minimumSplashDuration = Duration(seconds: 5);
+
+  final AuthRepository _authRepository = AuthRepository();
+
   @override
   void initState() {
     super.initState();
@@ -26,35 +28,46 @@ class _SplashPageState extends State<SplashPage> {
   }
 
   Future<void> _initialize() async {
+    AppLogger.splash(
+      'Splash iniciada. Tempo mínimo: '
+      '${_minimumSplashDuration.inSeconds} segundos.',
+    );
+
+    final minimumTime = Future<void>.delayed(_minimumSplashDuration);
+
+    SessionRestoreResult result;
+
     try {
-      final storage = SecureStorageService();
-
-      final refreshToken = await storage.getRefreshToken();
-
-      if (refreshToken == null || refreshToken.isEmpty) {
-        if (!mounted) return;
-
-        context.go('/login');
-        return;
-      }
-
-      final response = await AuthService().refreshToken(
-        refreshToken: refreshToken,
+      AppLogger.splash('Solicitando restauração da sessão.');
+      result = await _authRepository.restoreSession();
+      AppLogger.splash('Restauração concluída: $result.');
+    } catch (error, stackTrace) {
+      AppLogger.error(
+        'SPLASH',
+        'Erro não tratado durante a restauração.',
+        error: error,
+        stackTrace: stackTrace,
       );
+      await _authRepository.logout();
+      result = SessionRestoreResult.unauthenticated;
+    }
 
-      await storage.saveAccessToken(response['access_token']);
+    AppLogger.splash('Aguardando o tempo mínimo da Splash.');
+    await minimumTime;
 
-      await storage.saveRefreshToken(response['refresh_token']);
+    if (!mounted) {
+      AppLogger.splash('Splash não está mais montada. Navegação cancelada.');
+      return;
+    }
 
-      if (!mounted) return;
+    switch (result) {
+      case SessionRestoreResult.authenticated:
+        AppLogger.splash('Sessão autenticada. Navegando para Home.');
+        context.go('/home');
 
-      context.go('/home');
-    } catch (_) {
-      await SecureStorageService().clear();
-
-      if (!mounted) return;
-
-      context.go('/login');
+      case SessionRestoreResult.unauthenticated:
+        AppLogger.splash('Sessão não autenticada. Navegando para Login.');
+        context.go('/login');
     }
   }
 
@@ -67,10 +80,8 @@ class _SplashPageState extends State<SplashPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              AppLogo(width: 220),
-
+              AppLogo(width: DS.logoWidth),
               SizedBox(height: DS.spaceXXl),
-
               AppLoading(),
             ],
           ),

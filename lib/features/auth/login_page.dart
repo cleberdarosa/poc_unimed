@@ -22,7 +22,6 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
-
     cpfController.text = '00824521056';
     senhaController.text = 'H3itor@2026';
   }
@@ -80,7 +79,7 @@ class _LoginPageState extends State<LoginPage> {
 
                   Text(
                     'Acesse sua conta Unimed Porto Alegre',
-                    style: TextStyle(color: AppTheme.textSecondary),
+                    style: TextStyle(color: AppTheme.secondary),
                   ),
 
                   const SizedBox(height: 40),

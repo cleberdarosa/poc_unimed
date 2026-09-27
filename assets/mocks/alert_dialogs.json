@@ -1,0 +1,70 @@
+{
+  "items": [
+    {
+      "id": "information-example",
+      "type": "information",
+      "title": "Informação",
+      "message": "Esta é uma mensagem informativa da POC.",
+      "icon": "info",
+      "confirmLabel": "Entendi",
+      "cancelLabel": null,
+      "dismissible": true,
+      "enabled": true
+    },
+    {
+      "id": "success-example",
+      "type": "success",
+      "title": "Operação concluída",
+      "message": "A operação foi concluída com sucesso.",
+      "icon": "success",
+      "confirmLabel": "Continuar",
+      "cancelLabel": null,
+      "dismissible": true,
+      "enabled": true
+    },
+    {
+      "id": "warning-example",
+      "type": "warning",
+      "title": "Atenção",
+      "message": "Revise os dados antes de continuar.",
+      "icon": "warning",
+      "confirmLabel": "Continuar",
+      "cancelLabel": "Voltar",
+      "dismissible": false,
+      "enabled": true
+    },
+    {
+      "id": "error-example",
+      "type": "error",
+      "title": "Não foi possível continuar",
+      "message": "Ocorreu uma falha durante a operação.",
+      "icon": "error",
+      "confirmLabel": "Tentar novamente",
+      "cancelLabel": "Cancelar",
+      "dismissible": false,
+      "enabled": true
+    },
+    {
+      "id": "confirmation-example",
+      "type": "confirmation",
+      "title": "Confirmar operação",
+      "message": "Deseja realmente continuar?",
+      "icon": "question",
+      "confirmLabel": "Confirmar",
+      "cancelLabel": "Cancelar",
+      "dismissible": false,
+      "enabled": true
+    },
+    {
+      "id": "disabled-example",
+      "type": "information",
+      "title": "Modal desabilitado",
+      "message": "Este modal existe no contrato, mas está desabilitado.",
+      "icon": "info",
+      "confirmLabel": "Entendi",
+      "cancelLabel": null,
+      "dismissible": true,
+      "enabled": false
+    }
+  ]
+}
