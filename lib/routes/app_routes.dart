@@ -12,6 +12,8 @@ import '../features/device_permissions/files_permission_page.dart';
 import '../features/device_permissions/gallery_permission_page.dart';
 import '../features/device_permissions/location_permission_page.dart';
 
+import '../features/alert_dialog/alert_dialog_demo_page.dart';
+
 class AppRoutes {
   AppRoutes._();
 
@@ -46,6 +48,12 @@ class AppRoutes {
       GoRoute(
         path: '/device/location',
         builder: (context, state) => const LocationPermissionPage(),
+      ),
+      GoRoute(
+        path: '/components/alert-dialog',
+        builder: (context, state) {
+          return const AlertDialogDemoPage();
+        },
       ),
     ],
   );

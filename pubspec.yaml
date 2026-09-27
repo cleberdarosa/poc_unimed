@@ -69,6 +69,7 @@ flutter:
     - assets/images/
     - assets/mocks/menu.json
     - assets/mocks/bottom_navigation.json
+    - assets/mocks/
 
 
   # To add assets to your application, add an assets section, like this:

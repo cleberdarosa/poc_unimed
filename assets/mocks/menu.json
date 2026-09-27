@@ -121,6 +121,15 @@
           "route": "/home"
         }
       ]
-    }
+    },
+    {
+  "id": "alert-dialog-demo",
+  "title": "Modal de aviso",
+  "icon": "warning",
+  "color": "menuGreen",
+  "route": "/components/alert-dialog",
+  "enabled": true,
+  "children": []
+}
   ]
 }
